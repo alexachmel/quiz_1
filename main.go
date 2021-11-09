@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 )
 
@@ -13,5 +14,10 @@ type Quiz struct {
 */
 
 func main() {
-	fmt.Println("1 + 1 =", 1+1)
+	fileName := flag.String("file", "default.json", "file with quiz questions and answers in JSON")
+	flag.Parse()
+	_ = fileName
+
+
 }
+
