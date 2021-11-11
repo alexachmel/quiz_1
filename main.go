@@ -5,12 +5,15 @@ import (
 	"flag"
 	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var fileName = flag.String("file", "problems.json", "file with quiz questions and answers in JSON")
+var makeShuffle = flag.String("option", "no", "whether you want to shuffle the quiz order each time it is run (yes/no)")
 
 // Init the model for json data
 type Quiz struct {
@@ -42,13 +45,20 @@ func main() {
 
 	// 4. Print questions
 	fmt.Println("Please, answer the following questions:")
-	for _, problem := range problems {
-		fmt.Printf("%s\n", problem.Question)
-		arr := strings.Split(problem.Question, "+")
+	r := rand.New(rand.NewSource(time.Now().Unix()))
+	perm := r.Perm(len(problems))
+	for curr_idx, perm_idx := range perm {
+		var idx int
+		if *makeShuffle == "yes" {
+			idx = perm_idx
+		} else {
+			idx = curr_idx
+		}
+		fmt.Printf("%s\n", problems[idx].Question)
+		arr := strings.Split(problems[idx].Question, "+")
 		a, _ := strconv.Atoi(arr[0])
 		b, _ := strconv.Atoi(arr[1])
-		c := a + b
-		fmt.Printf("%s vs. %s\n", strconv.Itoa(c), problem.Answer)
+		fmt.Printf("%s vs. %s\n", strconv.Itoa(a+b), problems[idx].Answer)
 	}
 }
 
