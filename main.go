@@ -13,7 +13,7 @@ import (
 )
 
 var fileName = flag.String("file", "problems.json", "file with quiz questions and answers in JSON")
-var makeShuffle = flag.Bool("option", false, "whether you want to shuffle the quiz order each time it is run")
+var makeShuffle = flag.Bool("shuffle", false, "whether you want to shuffle the quiz order each time it is run")
 
 // Init the model for json data
 type Quiz struct {
@@ -44,6 +44,8 @@ func main() {
 	}
 
 	// 4. Print questions
+	right_ans := 0
+	wrong_ans := 0
 	fmt.Println("Please, answer the following questions:")
 	r := rand.New(rand.NewSource(time.Now().Unix()))
 	perm := r.Perm(len(problems))
@@ -60,6 +62,9 @@ func main() {
 		b, _ := strconv.Atoi(arr[1])
 		fmt.Printf("%s vs. %s\n", strconv.Itoa(a+b), problems[idx].Answer)
 	}
+	// 5.
+	fmt.Printf("The total number of questions correct is %d\n", right_ans)
+	fmt.Printf("There were %d questions in total\n", right_ans+wrong_ans)
 }
 
 func openFile() *os.File {
