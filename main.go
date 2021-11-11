@@ -13,7 +13,7 @@ import (
 )
 
 var fileName = flag.String("file", "problems.json", "file with quiz questions and answers in JSON")
-var makeShuffle = flag.String("option", "no", "whether you want to shuffle the quiz order each time it is run (yes/no)")
+var makeShuffle = flag.Bool("option", false, "whether you want to shuffle the quiz order each time it is run")
 
 // Init the model for json data
 type Quiz struct {
@@ -49,7 +49,7 @@ func main() {
 	perm := r.Perm(len(problems))
 	for curr_idx, perm_idx := range perm {
 		var idx int
-		if *makeShuffle == "yes" {
+		if *makeShuffle {
 			idx = perm_idx
 		} else {
 			idx = curr_idx
